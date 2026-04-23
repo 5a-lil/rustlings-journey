@@ -6,7 +6,7 @@
 // number of goals the team scored, and the total number of goals the team
 // conceded.
 
-use std::collections::HashMap;
+use std::{collections::HashMap, env::temp_dir};
 
 // A structure to store the goal details of a team.
 #[derive(Default)]
@@ -31,6 +31,12 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
         // Keep in mind that goals scored by team 1 will be the number of goals
         // conceded by team 2. Similarly, goals scored by team 2 will be the
         // number of goals conceded by team 1.
+        let ptr = scores.entry(team_1_name).or_insert(TeamScores { goals_scored: 0, goals_conceded: 0 });
+        ptr.goals_scored += team_1_score;
+        ptr.goals_conceded += team_2_score;
+        let ptr = scores.entry(team_2_name).or_insert(TeamScores { goals_scored: 0, goals_conceded: 0 });
+        ptr.goals_scored += team_2_score;
+        ptr.goals_conceded += team_1_score;
     }
 
     scores
